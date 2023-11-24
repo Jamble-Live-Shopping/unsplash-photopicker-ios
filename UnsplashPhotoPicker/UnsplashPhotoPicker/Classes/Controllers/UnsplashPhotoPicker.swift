@@ -46,7 +46,11 @@ public class UnsplashPhotoPicker: UINavigationController {
      */
     public init(configuration: UnsplashPhotoPickerConfiguration) {
         Configuration.shared = configuration
-
+        var colors = PhotoPickerColors()
+        colors.background = configuration.backgroundColor
+        colors.titleLabel = configuration.titleTextColor
+        colors.subtitleLabel = configuration.subtitleTextColor
+        UIColor.photoPicker = colors
         self.photoPickerViewController = UnsplashPhotoPickerViewController()
 
         super.init(nibName: nil, bundle: nil)
