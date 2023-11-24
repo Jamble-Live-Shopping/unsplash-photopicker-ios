@@ -8,21 +8,21 @@
 
 import UIKit
 
-struct PhotoPickerColors {
-    var background: UIColor {
+public struct PhotoPickerColors {
+    var background: UIColor = {
         if #available(iOS 13.0, *) { return .systemBackground }
         return .white
-    }
-    var titleLabel: UIColor {
+    }()
+    var titleLabel: UIColor = {
         if #available(iOS 13.0, *) { return .label }
         return .black
-    }
-    var subtitleLabel: UIColor {
+    }()
+    var subtitleLabel: UIColor = {
         if #available(iOS 13.0, *) { return .secondaryLabel }
         return .gray
-    }
+    }()
 }
 
 extension UIColor {
-    static let photoPicker = PhotoPickerColors()
+    public static var photoPicker = PhotoPickerColors()
 }
