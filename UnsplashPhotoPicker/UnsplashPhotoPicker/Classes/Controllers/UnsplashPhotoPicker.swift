@@ -48,8 +48,8 @@ public class UnsplashPhotoPicker: UINavigationController {
         Configuration.shared = configuration
         var colors = PhotoPickerColors()
         colors.background = configuration.backgroundColor
-        colors.titleLabel = configuration.titleTextColor
-        colors.subtitleLabel = configuration.subtitleTextColor
+        colors.titleLabel = configuration.titleColor
+        colors.subtitleLabel = configuration.subtitleColor
         UIColor.photoPicker = colors
         self.photoPickerViewController = UnsplashPhotoPickerViewController()
 

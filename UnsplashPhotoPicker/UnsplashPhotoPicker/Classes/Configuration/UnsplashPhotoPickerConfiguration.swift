@@ -43,6 +43,12 @@ public struct UnsplashPhotoPickerConfiguration {
 
     /// The disk capacity used by the cache.
     public var diskCapacity = defaultDiskCapacity
+    
+
+    public var backgroundColor = UIColor.photoPicker.background
+    public var titleColor = UIColor.photoPicker.titleLabel
+    public var subtitleColor = UIColor.photoPicker.subtitleLabel
+    
 
     /// Set the content safety filter.
     public var contentFilterLevel = defaultContentFilterLevel
