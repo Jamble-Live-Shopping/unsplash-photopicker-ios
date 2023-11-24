@@ -23,6 +23,6 @@ public struct PhotoPickerColors {
     }()
 }
 
-extension UIColor {
+public extension UIColor {
     public static var photoPicker = PhotoPickerColors()
 }
