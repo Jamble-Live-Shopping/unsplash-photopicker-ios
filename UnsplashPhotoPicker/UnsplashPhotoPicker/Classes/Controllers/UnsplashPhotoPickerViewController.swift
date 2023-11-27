@@ -37,9 +37,15 @@ class UnsplashPhotoPickerViewController: UIViewController {
         let searchController = UnsplashSearchController(searchResultsController: nil)
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.hidesNavigationBarDuringPresentation = false
+        searchController.searchBar.searchBarStyle = .prominent
         searchController.searchBar.delegate = self
         searchController.searchBar.placeholder = "search.placeholder".localized()
         searchController.searchBar.autocapitalizationType = .none
+        if let textFieldInsideSearchBar = searchController.searchBar.value(forKey: "searchField") as? UITextField {
+            textFieldInsideSearchBar.borderStyle = .none
+            textFieldInsideSearchBar.layer.masksToBounds = true
+     }
+
         return searchController
     }()
 
@@ -118,13 +124,14 @@ class UnsplashPhotoPickerViewController: UIViewController {
 
         view.backgroundColor = UIColor.photoPicker.background
         setupNotifications()
-        setupNavigationBar()
+//        setupNavigationBar()
         setupSearchController()
         setupCollectionView()
         setupSpinner()
-
         let trimmedQuery = Configuration.shared.query?.trimmingCharacters(in: .whitespacesAndNewlines)
         setSearchText(trimmedQuery)
+        self.navigationController?.navigationBar.isTranslucent = false
+        self.navigationController?.navigationBar.barTintColor = UIColor(hexString: "242424")
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -151,7 +158,7 @@ class UnsplashPhotoPickerViewController: UIViewController {
     }
 
     // MARK: - Setup
-
+    
     private func setupNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShowNotification(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHideNotification(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
@@ -160,7 +167,7 @@ class UnsplashPhotoPickerViewController: UIViewController {
     private func setupNavigationBar() {
         updateTitle()
         navigationItem.leftBarButtonItem = cancelBarButtonItem
-
+        navigationItem.hidesBackButton = true
         if Configuration.shared.allowsMultipleSelection {
             doneBarButtonItem.isEnabled = false
             navigationItem.rightBarButtonItem = doneBarButtonItem
@@ -169,12 +176,19 @@ class UnsplashPhotoPickerViewController: UIViewController {
 
     private func setupSearchController() {
         let trimmedQuery = Configuration.shared.query?.trimmingCharacters(in: .whitespacesAndNewlines)
-        if let query = trimmedQuery, query.isEmpty == false { return }
-
-        navigationItem.searchController = searchController
-        navigationItem.hidesSearchBarWhenScrolling = false
-        definesPresentationContext = true
-        extendedLayoutIncludesOpaqueBars = true
+          if let query = trimmedQuery, query.isEmpty == false { return }
+          
+          // Ensure the search bar is not hidden when scrolling
+          navigationItem.hidesSearchBarWhenScrolling = false
+          
+          // Remove the title view to eliminate extra space
+          navigationItem.titleView = nil
+          
+          // Set the search bar as the navigation item's title view
+          navigationItem.titleView = searchController.searchBar
+          
+          definesPresentationContext = true
+          extendedLayoutIncludesOpaqueBars = true
     }
 
     private func setupCollectionView() {
@@ -325,7 +339,6 @@ extension UnsplashPhotoPickerViewController: UISearchBarDelegate {
         refresh()
         scrollToTop()
         hideEmptyView()
-        updateTitle()
         updateDoneButtonState()
     }
 
@@ -337,7 +350,6 @@ extension UnsplashPhotoPickerViewController: UISearchBarDelegate {
         reloadData()
         scrollToTop()
         hideEmptyView()
-        updateTitle()
         updateDoneButtonState()
     }
 }
