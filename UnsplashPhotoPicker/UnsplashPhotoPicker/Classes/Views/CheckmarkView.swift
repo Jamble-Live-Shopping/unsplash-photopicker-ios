@@ -17,7 +17,7 @@ class CheckmarkView: UIView {
         let bundle = Bundle.local
         let image = UIImage(named: "checkmark", in: bundle, compatibleWith: nil)
         let imageView = UIImageView(image: image)
-        imageView.tintColor = .white
+         imageView.tintColor = .black
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
@@ -39,7 +39,7 @@ class CheckmarkView: UIView {
 
     private func postInit() {
         guard let shapeLayer = layer as? CAShapeLayer else { return }
-        shapeLayer.fillColor = tintColor.cgColor
+        shapeLayer.fillColor = UIColor.white.cgColor
         shapeLayer.shadowOffset = CGSize(width: 0, height: 0)
         shapeLayer.shadowRadius = 1
         shapeLayer.shadowOpacity = 0.25
@@ -47,7 +47,9 @@ class CheckmarkView: UIView {
         addSubview(checkmark)
         NSLayoutConstraint.activate([
             checkmark.centerXAnchor.constraint(equalTo: centerXAnchor),
-            checkmark.centerYAnchor.constraint(equalTo: centerYAnchor)
+            checkmark.centerYAnchor.constraint(equalTo: centerYAnchor),
+            checkmark.widthAnchor.constraint(equalToConstant: 14),
+            checkmark.heightAnchor.constraint(equalToConstant: 14)
             ])
     }
 
