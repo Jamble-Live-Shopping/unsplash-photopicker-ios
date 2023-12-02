@@ -58,6 +58,8 @@ class PhotoView: UIView {
         self.showsUsername = showsUsername
         userNameLabel.text = photo.user.displayName
         imageView.backgroundColor = photo.color
+        imageView.layer.cornerCurve = .continuous
+        imageView.layer.cornerRadius = 4
         currentPhotoID = photo.identifier
         downloadImage(with: photo)
     }
