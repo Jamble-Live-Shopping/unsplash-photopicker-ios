@@ -55,7 +55,7 @@ class PhotoView: UIView {
     // MARK: - Setup
 
     func configure(with photo: UnsplashPhoto, showsUsername: Bool = true) {
-        self.showsUsername = showsUsername
+        self.showsUsername = false
         userNameLabel.text = photo.user.displayName
         imageView.backgroundColor = photo.color
         imageView.layer.cornerCurve = .continuous
