@@ -25,6 +25,8 @@ public protocol UnsplashPhotoPickerDelegate: AnyObject {
      - parameter photoPicker: The `UnsplashPhotoPicker` instance responsible for selecting the photos.
      */
     func unsplashPhotoPickerDidCancel(_ photoPicker: UnsplashPhotoPicker)
+    
+    func unsplashPhotoPickerDidStartEditing(_ photoPicker: UnsplashPhotoPicker)
 }
 
 /// `UnsplashPhotoPicker` is an object that can be used to select photos from Unsplash.
@@ -86,6 +88,7 @@ public class UnsplashPhotoPicker: UINavigationController {
 extension UnsplashPhotoPicker: UnsplashPhotoPickerViewControllerDelegate {
     func unsplashPhotoPickerViewController(_ viewController: UnsplashPhotoPickerViewController, didSelectPhotos photos: [UnsplashPhoto]) {
         trackDownloads(for: photos)
+        photoPickerViewController.dismissKeyboard()
         photoPickerDelegate?.unsplashPhotoPicker(self, didSelectPhotos: photos)
         //dismiss(animated: true, completion: nil)
     }
@@ -93,5 +96,9 @@ extension UnsplashPhotoPicker: UnsplashPhotoPickerViewControllerDelegate {
     func unsplashPhotoPickerViewControllerDidCancel(_ viewController: UnsplashPhotoPickerViewController) {
         photoPickerDelegate?.unsplashPhotoPickerDidCancel(self)
         //dismiss(animated: true, completion: nil)
+    }
+    
+    func unsplashPhotoPickerViewControllerDidStartEditing(_ viewController: UnsplashPhotoPickerViewController) {
+        photoPickerDelegate?.unsplashPhotoPickerDidStartEditing(self)
     }
 }
