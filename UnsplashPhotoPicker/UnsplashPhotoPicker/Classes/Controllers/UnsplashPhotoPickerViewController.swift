@@ -11,6 +11,8 @@ import UIKit
 protocol UnsplashPhotoPickerViewControllerDelegate: AnyObject {
     func unsplashPhotoPickerViewController(_ viewController: UnsplashPhotoPickerViewController, didSelectPhotos photos: [UnsplashPhoto])
     func unsplashPhotoPickerViewControllerDidCancel(_ viewController: UnsplashPhotoPickerViewController)
+    
+    func unsplashPhotoPickerViewControllerDidStartEditing(_ viewController: UnsplashPhotoPickerViewController)
 }
 
 class UnsplashPhotoPickerViewController: UIViewController {
@@ -352,6 +354,17 @@ extension UnsplashPhotoPickerViewController: UISearchBarDelegate {
         hideEmptyView()
         updateDoneButtonState()
     }
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        self.delegate?.unsplashPhotoPickerViewControllerDidStartEditing(self)
+    }
+    
+    func dismissKeyboard() {
+        if searchController.searchBar.isFirstResponder {
+            searchController.searchBar.resignFirstResponder()
+        }
+    }
+
 }
 
 // MARK: - UIScrollViewDelegate
