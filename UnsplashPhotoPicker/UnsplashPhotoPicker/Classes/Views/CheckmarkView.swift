@@ -14,8 +14,7 @@ class CheckmarkView: UIView {
     override var intrinsicContentSize: CGSize { return CGSize(width: 24, height: 24) }
 
     private lazy var checkmark: UIImageView = {
-        let bundle = Bundle.local
-        let image = UIImage(named: "checkmark", in: bundle, compatibleWith: nil)
+        let image = UIImage(systemName: "checkmark")
         let imageView = UIImageView(image: image)
          imageView.tintColor = .black
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -63,7 +62,7 @@ class CheckmarkView: UIView {
     override func tintColorDidChange() {
         super.tintColorDidChange()
         guard let shapeLayer = layer as? CAShapeLayer else { return }
-        shapeLayer.fillColor = tintColor.cgColor
+        shapeLayer.fillColor = UIColor.white.cgColor
     }
 
 }
