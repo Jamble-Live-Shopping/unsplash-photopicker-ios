@@ -20,6 +20,19 @@ class PhotoView: UIView {
     @IBOutlet weak var gradientView: GradientView!
     @IBOutlet weak var userNameLabel: UILabel!
     @IBOutlet var overlayViews: [UIView]!
+    
+    private lazy var infoButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "info.circle"), for: .normal)
+        button.tintColor = .white.withAlphaComponent(0.8)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            button.heightAnchor.constraint(equalToConstant: 18),
+            button.widthAnchor.constraint(equalToConstant: 18)
+        ])
+        button.addTarget(self, action: #selector(toggleUsername), for: .touchUpInside)
+        return button
+    }()
 
     var showsUsername = true {
         didSet {
@@ -32,9 +45,17 @@ class PhotoView: UIView {
         super.awakeFromNib()
 
         accessibilityIgnoresInvertColors = true
+        
+        infoButton.isUserInteractionEnabled = true
         gradientView.setColors([
             GradientView.Color(color: .clear, location: 0),
             GradientView.Color(color: UIColor(white: 0, alpha: 0.5), location: 1)
+        ])
+        
+        self.addSubview(infoButton)
+        NSLayoutConstraint.activate([
+            infoButton.topAnchor.constraint(equalTo: self.topAnchor, constant: 4),
+            infoButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -4)
         ])
     }
 
@@ -56,12 +77,23 @@ class PhotoView: UIView {
 
     func configure(with photo: UnsplashPhoto, showsUsername: Bool = true) {
         self.showsUsername = false
-        userNameLabel.text = photo.user.displayName
+        userNameLabel.text = "Photo by: \(photo.user.displayName) on Unsplash"
+        userNameLabel.numberOfLines = 2
+        userNameLabel.font = .systemFont(ofSize: 12)
         imageView.backgroundColor = photo.color
         imageView.layer.cornerCurve = .continuous
         imageView.layer.cornerRadius = 4
         currentPhotoID = photo.identifier
         downloadImage(with: photo)
+    }
+    
+    @objc private func toggleUsername() {
+     
+        if self.showsUsername == false {
+            self.showsUsername = true
+        } else {
+            showsUsername = false
+        }
     }
 
     private func downloadImage(with photo: UnsplashPhoto) {
@@ -91,6 +123,7 @@ class PhotoView: UIView {
             URLQueryItem(name: "dpr", value: "\(Int(screenScale))")
         ])
     }
+    
 
     // MARK: - Utility
 
