@@ -15,11 +15,14 @@ class PhotoView: UIView {
     private var currentPhotoID: String?
     private var imageDownloader = ImageDownloader()
     private var screenScale: CGFloat { return UIScreen.main.scale }
+    private var profileLink: URL?
 
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var gradientView: GradientView!
     @IBOutlet weak var userNameLabel: UILabel!
     @IBOutlet var overlayViews: [UIView]!
+    
+    
     
     private lazy var infoButton: UIButton = {
         let button = UIButton()
@@ -45,6 +48,8 @@ class PhotoView: UIView {
         super.awakeFromNib()
 
         accessibilityIgnoresInvertColors = true
+        
+        
         
         infoButton.isUserInteractionEnabled = true
         gradientView.setColors([
@@ -77,6 +82,7 @@ class PhotoView: UIView {
 
     func configure(with photo: UnsplashPhoto, showsUsername: Bool = true) {
         self.showsUsername = false
+        self.profileLink = photo.user.profileURL
         userNameLabel.text = "Photo by: \(photo.user.displayName) on Unsplash"
         userNameLabel.numberOfLines = 2
         userNameLabel.font = .systemFont(ofSize: 12)
@@ -85,6 +91,11 @@ class PhotoView: UIView {
         imageView.layer.cornerRadius = 4
         currentPhotoID = photo.identifier
         downloadImage(with: photo)
+
+
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(openUserLink))
+        userNameLabel.addGestureRecognizer(tapGesture)
+        userNameLabel.isUserInteractionEnabled = true
     }
     
     @objc private func toggleUsername() {
@@ -95,6 +106,16 @@ class PhotoView: UIView {
             showsUsername = false
         }
     }
+    
+    @objc private func openUserLink() {
+        guard let profileLink else { return }
+        var urlString = profileLink.absoluteString
+        urlString.append("?utm_source=your_app_name&utm_medium=referral")
+        if let url = URL(string: urlString) {
+            UIApplication.shared.open(url)
+        }
+}
+    
 
     private func downloadImage(with photo: UnsplashPhoto) {
         guard let regularUrl = photo.urls[.regular] else { return }
