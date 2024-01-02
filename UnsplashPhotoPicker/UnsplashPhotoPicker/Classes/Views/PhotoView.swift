@@ -110,7 +110,7 @@ class PhotoView: UIView {
     @objc private func openUserLink() {
         guard let profileLink else { return }
         var urlString = profileLink.absoluteString
-        urlString.append("?utm_source=your_app_name&utm_medium=referral")
+        urlString.append("?utm_source=jamble&utm_medium=referral")
         if let url = URL(string: urlString) {
             UIApplication.shared.open(url)
         }
