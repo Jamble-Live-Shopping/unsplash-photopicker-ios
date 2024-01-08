@@ -68,8 +68,12 @@ public class UnsplashPhotoPicker: UINavigationController {
 
     public override func viewDidLoad() {
         super.viewDidLoad()
-
         viewControllers = [photoPickerViewController]
+    }
+    
+    public func setQuery(query: String){
+        photoPickerViewController.updateSearchController(text: query)
+        photoPickerViewController.setSearchText(query)
     }
 
     // MARK: - Download tracking
@@ -90,12 +94,10 @@ extension UnsplashPhotoPicker: UnsplashPhotoPickerViewControllerDelegate {
         trackDownloads(for: photos)
         photoPickerViewController.dismissKeyboard()
         photoPickerDelegate?.unsplashPhotoPicker(self, didSelectPhotos: photos)
-        //dismiss(animated: true, completion: nil)
     }
 
     func unsplashPhotoPickerViewControllerDidCancel(_ viewController: UnsplashPhotoPickerViewController) {
         photoPickerDelegate?.unsplashPhotoPickerDidCancel(self)
-        //dismiss(animated: true, completion: nil)
     }
     
     func unsplashPhotoPickerViewControllerDidStartEditing(_ viewController: UnsplashPhotoPickerViewController) {
