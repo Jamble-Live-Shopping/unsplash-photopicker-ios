@@ -35,7 +35,7 @@ class UnsplashPhotoPickerViewController: UIViewController {
         )
     }()
 
-    private lazy var searchController: UISearchController = {
+     lazy var searchController: UISearchController = {
         let searchController = UnsplashSearchController(searchResultsController: nil)
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.hidesNavigationBarDuringPresentation = false
@@ -102,6 +102,9 @@ class UnsplashPhotoPickerViewController: UIViewController {
 
     private var previewingContext: UIViewControllerPreviewing?
     private var searchText: String?
+    
+    var tagQuery: String?
+    
 
     weak var delegate: UnsplashPhotoPickerViewControllerDelegate?
 
@@ -109,7 +112,7 @@ class UnsplashPhotoPickerViewController: UIViewController {
 
     init() {
         self.dataSource = editorialDataSource
-
+        
         super.init(nibName: nil, bundle: nil)
 
         dataSource.delegate = self
@@ -123,7 +126,6 @@ class UnsplashPhotoPickerViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         view.backgroundColor = UIColor.photoPicker.background
         setupNotifications()
 //        setupNavigationBar()
@@ -131,9 +133,10 @@ class UnsplashPhotoPickerViewController: UIViewController {
         setupCollectionView()
         setupSpinner()
         let trimmedQuery = Configuration.shared.query?.trimmingCharacters(in: .whitespacesAndNewlines)
-        setSearchText(trimmedQuery)
+       // setSearchText(trimmedQuery)
         self.navigationController?.navigationBar.isTranslucent = false
         self.navigationController?.navigationBar.barTintColor = UIColor(hexString: "242424")
+    
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -143,6 +146,7 @@ class UnsplashPhotoPickerViewController: UIViewController {
             refresh()
         }
     }
+    
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -270,8 +274,13 @@ class UnsplashPhotoPickerViewController: UIViewController {
     }
 
     // MARK: - Data
+    
+    func updateSearchController(text: String){
+        self.searchController.searchBar.text = text
+        self.setSearchText(text)
+    }
 
-    private func setSearchText(_ text: String?) {
+    func setSearchText(_ text: String?) {
         if let text = text, text.isEmpty == false {
             dataSource = PhotosDataSourceFactory.search(query: text).dataSource
             searchText = text
@@ -336,7 +345,6 @@ class UnsplashPhotoPickerViewController: UIViewController {
 extension UnsplashPhotoPickerViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let text = searchBar.text else { return }
-
         setSearchText(text)
         refresh()
         scrollToTop()
@@ -347,7 +355,7 @@ extension UnsplashPhotoPickerViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         guard self.searchText != nil && searchText.isEmpty else { return }
 
-        setSearchText(nil)
+       // setSearchText(nil)
         refresh()
         reloadData()
         scrollToTop()
